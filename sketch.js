@@ -62,11 +62,16 @@ spawnstars()
  if(space.y > 500){
     space.y = 250
   }
-  if(invisibleGroup.isTouching(rocket)){
+  if(asteroidsGroup.isTouching(rocket)){
    space.velocityY = 0
    rocket.destroy()
-   asteroid.destroy()
+   asteroidsGroup.destroyEach();
+   starsGroup.destroyEach();
    gameState = "End"
+}
+if(starsGroup.isTouching(rocket)){
+   score = score +1
+   star.destroy()
 }
 
 }
@@ -83,45 +88,41 @@ if(gameState === End){
 function spawn_Asteroid(){
     
     if (frameCount % 340 === 0){
-    asteroid = createSprite(400,50)
+     var asteroid = createSprite(400,50)
     asteroid.scale = 0.2;
-    var invisible = createSprite(200,15);
-    invisible.width = asteroid.width;
-    invisible.height = asteroid.height;
-    asteroidsGroup.add(asteroid)
-    invisibleGroup.add(invisible)
+   
+    
+    
+   
     
     
     asteroid.velocityY = 4
     //asteroid.x = Math.round(random(height,width));
     asteroid.x = Math.round(random(10,1280));
-    invisible.x = asteroid.x
-    invisible.velocityY = 4;
-    asteroid.addImage("aster",asteroidimg)
-    rocket.depth = asteroid.depth;
-    rocket.depth +=1;
     
-    invisible.debug = false
-    invisible.visible = false;
-    if(invisible.isTouching(rocket)){
-        space.velocityY = 0
-    }
+    asteroid.addImage("aster",asteroidimg)
+    //rocket.depth = asteroid.depth;
+    //rocket.depth +=1;
+    
+   
+    asteroidsGroup.add(asteroid)
     }
 }
 function spawnstars(){
    if (frameCount % 250 === 0){
    star = createSprite(200,50)
    star.scale = 0.1
-   if(rocket.isTouching(star)){
-      score = score +1
-   }
+   starsGroup.add(star)
+   star.depth = rocket.depth;
+   
+
    star.setCollider("rectangle",0,0,50,50);
    star.addImage("star",starimg)
-   rocket.depth = star.depth
+   //rocket.depth = star.depth
    
    star.velocityY = 5;
    star.x = Math.round(random(10,1280));
-   star.debug = true
-   starsGroup.add(star)
-   }
+   
+   
+}
 }
